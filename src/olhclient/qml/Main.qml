@@ -46,6 +46,7 @@ ApplicationWindow {
     minimumHeight: 700
     visible: true
     title: page === "macros" ? "Macros — " + backend.brand
+        : page === "cluster" ? "RGB Cluster — " + backend.brand
         : page === "profiles" ? "Profiles — " + backend.brand
         : session ? session.product + " — " + backend.brand
         : receiver ? receiver.product + " — " + backend.brand : backend.brand
@@ -191,6 +192,14 @@ ApplicationWindow {
         active: window.page === "profiles" && window.backend.openLinkHub && window.backend.connected
                 && !window.backend.authRequired
         sourceComponent: TemperatureProfilesView { backend: window.backend }
+    }
+
+    Loader {
+        anchors.fill: parent
+        anchors.margins: Theme.gap
+        active: window.page === "cluster" && window.backend.openLinkHub && window.backend.connected
+                && !window.backend.authRequired
+        sourceComponent: ClusterView { cluster: window.backend.cluster }
     }
 
     // -- empty / error states ------------------------------------------------

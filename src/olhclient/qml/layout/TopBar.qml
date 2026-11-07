@@ -35,7 +35,7 @@ Rectangle {
         Repeater {
             model: root.backend && root.backend.openLinkHub
                    ? [{ page: "devices", title: "DEVICES" }, { page: "macros", title: "MACROS" },
-                      { page: "profiles", title: "PROFILES" }]
+                      { page: "profiles", title: "PROFILES" }, { page: "cluster", title: "RGB CLUSTER" }]
                    : [{ page: "devices", title: "DEVICES" }]
             Text {
                 id: tab

@@ -13,6 +13,7 @@ from olhclient.core.artwork import lit, zone_colors
 from olhclient.core.gpu import GpuSession
 from olhclient.core.keychron import KeychronSession
 from olhclient.core.listmodel import DictListModel
+from olhclient.core.cluster import Cluster
 from olhclient.core.macros import MacroLibrary
 from olhclient.core.receiver import ReceiverSession
 from olhclient.core.session import QML_DIR, DeviceSession, file_url, kind_icon
@@ -105,6 +106,9 @@ class Backend(QObject):
         self._olh_items: list[dict[str, Any]] = []
         self._receiver_items: list[dict[str, Any]] = []
         self._brand = brand
+        self._cluster = Cluster(api, self.worker, self) if api is not None else None
+        if self._cluster is not None:
+            self._cluster.failed.connect(self._report_error)
         self._macros = MacroLibrary(api, self.worker, self) if api is not None else None
         if self._macros is not None:
             self._macros.message.connect(self.notify)
@@ -451,6 +455,10 @@ class Backend(QObject):
             self.authRequiredChanged.emit()
 
     # -- QML API -----------------------------------------------------------
+
+    @Property("QVariant", constant=True)
+    def cluster(self):
+        return self._cluster
 
     @Slot()
     def loadTemperatureForm(self) -> None:
